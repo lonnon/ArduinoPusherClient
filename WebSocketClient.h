@@ -28,7 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <WString.h>
-#include <Ethernet.h>
+#include <WiFlyHQ.h>
 #include "Arduino.h"
 
 //Uncomment this to use WIFLY Client
@@ -39,6 +39,7 @@ class WebSocketClient {
 		typedef void (*DataArrivedDelegate)(WebSocketClient client, String data);
 		bool connect(char hostname[], char path[] = "/", int port = 80);
         bool connected();
+        void setClient(WiFly client);
         void disconnect();
 		void monitor();
 		void setDataArrivedDelegate(DataArrivedDelegate dataArrivedDelegate);
@@ -46,10 +47,11 @@ class WebSocketClient {
 	private:
         String getStringTableItem(int index);
         void sendHandshake(char hostname[], char path[]);
-        EthernetClient _client;
+        WiFly _client;
         DataArrivedDelegate _dataArrivedDelegate;
         bool readHandshake();
         String readLine();
+        int getMessage(char *buf, int size);
 };
 
 

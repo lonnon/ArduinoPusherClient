@@ -26,6 +26,7 @@
 #include <WString.h>
 #include <string.h>
 #include <stdlib.h>
+#include <WiFlyHQ.h>
 
 prog_char stringVar[] PROGMEM = "{0}";
 prog_char clientHandshakeLine1[] PROGMEM = "GET {0} HTTP/1.1";
@@ -51,11 +52,12 @@ String WebSocketClient::getStringTableItem(int index) {
     strcpy_P(buffer, (char*)pgm_read_word(&(WebSocketClientStringTable[index])));
     return String(buffer);
 }
-
+void WebSocketClient::setClient(WiFly client) {
+    _client = client;
+}
 bool WebSocketClient::connect(char hostname[], char path[], int port) {
     bool result = false;
-
-    if (_client.connect(hostname, port)) {
+    if (_client.open(hostname, port)) {
         sendHandshake(hostname, path);
         result = readHandshake();
     }
@@ -65,28 +67,30 @@ bool WebSocketClient::connect(char hostname[], char path[], int port) {
 
 
 bool WebSocketClient::connected() {
-    return _client.connected();
+    return _client.isConnected();
 }
 
 void WebSocketClient::disconnect() {
-    _client.stop();
+    _client.close();
 }
+int WebSocketClient::getMessage(char *buf, int size)
+{
+    int len = 0; 
 
-void WebSocketClient::monitor () {
-    char character;
-    
-	if (_client.available() > 0 && (character = _client.read()) == 0) {
-        String data = "";
-        bool endReached = false;
-        while (!endReached) {
-            character = _client.read();
-            endReached = character == -1;
-
-            if (!endReached) {
-                data += character;
-            }
+    if (_client.available() > 0) {
+        if (_client.read() == 0) {
+            /* read up to the end of the message (255) */
+            len = _client.getsTerm(buf, size, 255);
         }
-        
+    }
+    return len;
+}
+void WebSocketClient::monitor () {
+    char inBuf[128];
+    char outBuf[128];
+    uint8_t outBufInd = 0;
+    if (getMessage(inBuf, sizeof(inBuf)) > 0) {
+        String data = String(inBuf);
         if (_dataArrivedDelegate != NULL) {
             _dataArrivedDelegate(*this, data);
         }
@@ -137,7 +141,7 @@ bool WebSocketClient::readHandshake() {
     result = handshake.indexOf(response) != -1;
     
     if(!result) {
-        _client.stop();
+        _client.close();
     }
     
     return result;

@@ -26,6 +26,7 @@
 #include <HashMap/HashMap.h>
 #include <WString.h>
 #include <string.h>
+#include <WiFlyHQ.h>
 #include <stdlib.h>
 
 const byte HASH_SIZE = 10;
@@ -46,7 +47,7 @@ prog_char unsubscribeMessage[] PROGMEM = "{\"channel\": \"{0}\" }";
 prog_char triggerEventMessage[] PROGMEM = "{\"event\": \"{0}\", \"data\": {1} }";
 prog_char eventNameStart[] PROGMEM = "event";
 prog_char unsubscribeEventName[] PROGMEM = "pusher:unsubscribe";
-
+prog_char dataStart[] PROGMEM = "data";
 
 PROGMEM const char *stringTable[] =
 {   
@@ -62,7 +63,8 @@ PROGMEM const char *stringTable[] =
     unsubscribeMessage,
     triggerEventMessage,
     eventNameStart,
-    unsubscribeEventName
+    unsubscribeEventName,
+    dataStart
 };
 
 String PusherClient::getStringTableItem(int index) {
@@ -83,7 +85,6 @@ bool PusherClient::connect(String appId) {
 
     char pathData[path.length() + 1];
     path.toCharArray(pathData, path.length() + 1);
-    
     return _client.connect("ws.pusherapp.com", pathData, 80);
 }
 
@@ -93,6 +94,10 @@ bool PusherClient::connected() {
 
 void PusherClient::disconnect() {
     _client.disconnect();
+}
+
+void PusherClient::setClient(WiFly client) {
+    _client.setClient(client);
 }
 
 void PusherClient::monitor () {
@@ -159,15 +164,17 @@ void PusherClient::triggerEvent(String eventName, String eventData) {
 
 void PusherClient::dataArrived(WebSocketClient client, String data) {
     String eventNameStart = getStringTableItem(11);
+    String dataStart = getStringTableItem(13);
     String eventName = parseMessageMember(eventNameStart, data);
+    String dataStr = parseMessageMember(dataStart, data);
     
     if (_bindAllDelegate != NULL) {
-        _bindAllDelegate(data);
+        _bindAllDelegate(dataStr);
     }
     
     EventDelegate delegate = _bindMap[eventName];
     if (delegate != NULL) {
-        delegate(data);
+        delegate(dataStr);
     }
 }
 

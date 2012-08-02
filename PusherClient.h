@@ -31,6 +31,7 @@
 #include <WString.h>
 #include "Arduino.h"
 #include <WebSocketClient.h>
+#include <WiFlyHQ.h>
 
 //Uncomment this to use WIFLY Client
 //#define WIFLY true
@@ -43,6 +44,7 @@ class PusherClient {
         bool connect(String appId);
         bool connected();
         void disconnect();
+        void setClient(WiFly client);
         void monitor();
         void bindAll(EventDelegate delegate);
         void bind(String eventName, EventDelegate delegate);
