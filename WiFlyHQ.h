@@ -56,7 +56,7 @@
 #include <Arduino.h>
 #include <Stream.h>
 #include <avr/pgmspace.h>
-//#include <IPAddress.h>
+#include <IPAddress.h>
 
 /* IP Protocol bits */
 #define WIFLY_PROTOCOL_UDP		0x01
@@ -100,7 +100,7 @@
 
 #define WIFLY_MODE_WPA			0	
 #define WIFLY_MODE_WEP			1
-/*
+
 class WFDebug : public Stream {
 public:
     WFDebug();
@@ -116,7 +116,7 @@ public:
 private:
     Stream *debug;
 };
-*/
+
 class WiFly : public Stream {
 public:
     WiFly();
@@ -133,7 +133,7 @@ public:
     char *getDNS(char *buf, int size);
     char *getMAC(char *buf, int size);
     int8_t getDHCPMode();
-    //uint32_t getRate();
+    uint32_t getRate();
     uint8_t getTxPower();
 
     uint16_t getConnection();
@@ -158,17 +158,15 @@ public:
     boolean setIP(const char *buf);
     boolean setIP(const __FlashStringHelper *buf);
     boolean setPort(const uint16_t port);
-    boolean setKey(const char *buf);
-    boolean setPassphrase(const char *buf);
-    boolean setDHCP(const uint8_t mode);
-   /* boolean setNetmask(const char *buf);
+    boolean setNetmask(const char *buf);
     boolean setNetmask(const __FlashStringHelper *buf);
     boolean setGateway(const char *buf);
     boolean setDNS(const char *buf);
     boolean setChannel(uint8_t channel);
-
+    boolean setKey(const char *buf);
+    boolean setPassphrase(const char *buf);
     boolean setSpaceReplace(const char *buf);
-
+    boolean setDHCP(const uint8_t mode);
     boolean setRate(uint32_t rate);
     boolean setTxPower(uint8_t dBm);
 
@@ -178,12 +176,12 @@ public:
     boolean setHost(const char *buf, uint16_t port);
 
     boolean setProtocol(const uint8_t protocol);
-    boolean setIpProtocol(const uint8_t protocol);	* obsolete *
+    boolean setIpProtocol(const uint8_t protocol);	/* obsolete */
     boolean setIpFlags(const uint8_t flags);
     boolean setUartMode(const uint8_t mode);
 
     boolean setBroadcastInterval(const uint8_t seconds);
-*
+/*
     boolean setTimeAddress(const char *buf);
     boolean setTimePort(const uint16_t port);
     boolean setTimezone(const uint8_t zone);
@@ -200,8 +198,8 @@ public:
     boolean setFlushSize(uint16_t size);
     boolean enableDataTrigger(const uint16_t flushtime=10, const char flushChar=0, const uint16_t flushSize=64);
     boolean disableDataTrigger();
-   // boolean enableUdpAutoPair();
-   // boolean disableUdpAutoPair();
+    boolean enableUdpAutoPair();
+    boolean disableUdpAutoPair();
 
     boolean setIOFunc(const uint8_t func);
 
@@ -216,7 +214,7 @@ public:
     boolean enableDHCP();
     boolean disableDHCP();
     
-   // boolean createAdhocNetwork(const char *ssid, uint8_t channel);
+    boolean createAdhocNetwork(const char *ssid, uint8_t channel);
     boolean join(const char *ssid, uint16_t timeout=20000);
     boolean join(uint16_t timeout=20000);
     boolean join(const char *ssid, const char *password, bool dhcp=true, uint8_t mode=WIFLY_MODE_WPA, uint16_t timeout=20000);
@@ -226,19 +224,19 @@ public:
     boolean save();
     boolean reboot();
     boolean factoryRestore();
-/*
+
     boolean sendto(const uint8_t *data, uint16_t size, const char *host, uint16_t port);
     boolean sendto(const uint8_t *data, uint16_t size, IPAddress host, uint16_t port);
     boolean sendto(const char *data, const char *host, uint16_t port);
     boolean sendto(const char *data, IPAddress host, uint16_t port);
     boolean sendto(const __FlashStringHelper *data, const char *host, uint16_t port);
     boolean sendto(const __FlashStringHelper *data, IPAddress host, uint16_t port);
-*/
+
     void enableHostRestore();
     void disableHostRestore();
 
     boolean open(const char *addr, int port=80, boolean block=true);
-    //boolean open(IPAddress addr, int port=80, boolean block=true);
+    boolean open(IPAddress addr, int port=80, boolean block=true);
     boolean close();
     boolean openComplete();
     boolean isConnected();
@@ -250,8 +248,8 @@ public:
     virtual void flush();
     virtual int peek();
 
-  //  char *iptoa(IPAddress addr, char *buf, int size);
-  //  IPAddress atoip(char *buf);
+    char *iptoa(IPAddress addr, char *buf, int size);
+    IPAddress atoip(char *buf);
     boolean isDotQuad(const char *addr);
 
     void sendChunk(const char *str);
@@ -261,15 +259,15 @@ public:
     void sendChunkln(void);
 
     int getFreeMemory();
-   // void terminal();
+    void terminal();
   
     using Print::write;
-/*
+
     void dbgBegin(int size=256);
     void dbgDump();
     void dbgEnd();
     boolean debugOn;
-*/
+
     boolean match(const char *str, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
     boolean match(const __FlashStringHelper *str, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
     int multiMatch_P(uint16_t timeout, uint8_t count, ...);
@@ -277,7 +275,7 @@ public:
     int getsTerm(char *buf, int size, char term, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
     void flushRx(int timeout=WIFLY_DEFAULT_TIMEOUT);
 
-  //  WFDebug debug;  /* Internal debug channel. */
+    WFDebug debug;  /* Internal debug channel. */
     
   private:
     void init(void);
@@ -344,10 +342,10 @@ public:
     
 
 
-    /*  for dbgDump() *
+    /*  for dbgDump() */
     char *dbgBuf;
     int dbgInd;
-    int dbgMax;*/
+    int dbgMax;
 };
 
 #endif
