@@ -53,13 +53,12 @@ class PusherClient {
         void subscribe(String channel, String auth, String userId);
         void triggerEvent(String eventName, String eventData);
         void unsubscribe(String channel);
-        static String parseMessageMember(String memberName, String data);
     private:
         String _appId;
         WebSocketClient _client;
         static String getStringTableItem(int index);
         static void dataArrived(WebSocketClient client, String data);
-
+        static String parseMessageMember(String memberName, String data);
 };
 
 

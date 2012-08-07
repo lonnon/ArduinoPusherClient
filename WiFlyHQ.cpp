@@ -1799,29 +1799,29 @@ boolean WiFly::setIpFlags(const uint8_t protocol)
     return setopt(PSTR("set ip protocol"), protocol, HEX);
 }
 
-/** Set NTP server IP address *
+/** Set NTP server IP address */
 boolean WiFly::setTimeAddress(const char *buf)
 {
     return setopt(PSTR("set time address"), buf);
-}*/
+}
 
-/** Set NTP server port *
+/** Set NTP server port */
 boolean WiFly::setTimePort(const uint16_t port)
 {
     return setopt(PSTR("set time port"), port);
-}*/
+}
 
-/** Set timezone for calculating local time based on NTP time. *
+/** Set timezone for calculating local time based on NTP time. */
 boolean WiFly::setTimezone(const uint8_t zone)
 {
     return setopt(PSTR("set time zone"), zone);
-}*/
+}
 
-/** Set the NTP update period *
+/** Set the NTP update period */
 boolean WiFly::setTimeEnable(const uint16_t period)
 {
     return setopt(PSTR("set time enable"), period);
-}*/
+}
 
 boolean WiFly::setUartMode(const uint8_t mode)
 {
@@ -2111,11 +2111,11 @@ uint8_t WiFly::getTxPower()
  * Default is 100 milliseconds.
  * @param msecs the number of milliseconds between beacon
  * @returns true on success, false on failure.
- *
+ */
 boolean WiFly::setAdhocBeacon(const uint16_t msecs)
 {
     return setopt(PSTR("set adhoc beacon"), msecs);
-}*/
+}
 
 /**
  * Set the ad hoc network probe period.  When this number of seconds
@@ -2123,7 +2123,7 @@ boolean WiFly::setAdhocBeacon(const uint16_t msecs)
  * Default is 5 seconds..
  * @param secs the number of seconds in the probe period.
  * @returns true on success, false on failure.
- *
+ */
 boolean WiFly::setAdhocProbe(const uint16_t secs)
 {
     return setopt(PSTR("set adhoc probe"), secs);
@@ -2142,7 +2142,7 @@ uint16_t WiFly::getAdhocProbe()
 uint16_t WiFly::getAdhocReboot()
 {
     return getopt(WIFLY_GET_REBOOT);
-}*/
+}
 
 /** join a wireless network */
 boolean WiFly::join(const char *ssid, uint16_t timeout)
@@ -2377,7 +2377,7 @@ boolean WiFly::ping(const char *host)
  * @retval true - successfully create Ad Hoc network
  * @retval false - failed
  * @note the WiFly is rebooted as the final step of this command.
- *
+ */
 boolean WiFly::createAdhocNetwork(const char *ssid, uint8_t channel)
 {
     startCommand();
@@ -2392,7 +2392,7 @@ boolean WiFly::createAdhocNetwork(const char *ssid, uint8_t channel)
     finishCommand();
     reboot();
     return true;
-}*/
+}
 
 /**
  * Open a TCP connection.

@@ -181,7 +181,7 @@ public:
     boolean setUartMode(const uint8_t mode);
 
     boolean setBroadcastInterval(const uint8_t seconds);
-/*
+
     boolean setTimeAddress(const char *buf);
     boolean setTimePort(const uint16_t port);
     boolean setTimezone(const uint8_t zone);
@@ -192,7 +192,7 @@ public:
     uint16_t getAdhocBeacon();
     uint16_t getAdhocProbe();
     uint16_t getAdhocReboot();
-*/
+
     boolean setFlushTimeout(const uint16_t timeout);
     boolean setFlushChar(const char flushChar);
     boolean setFlushSize(uint16_t size);
@@ -275,6 +275,22 @@ public:
     int getsTerm(char *buf, int size, char term, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
     void flushRx(int timeout=WIFLY_DEFAULT_TIMEOUT);
 
+    boolean setFtpDefaults(void);
+    boolean setFtpAddress(const char *addr);
+    boolean setFtpPort(uint16_t port);
+    boolean setFtpDirectory(const char *dir);
+    boolean setFtpUser(const char *user);
+    boolean setFtpPassword(const char *password);
+    boolean setFtpFilename(const char *filename);
+    boolean setFtpTimer(uint16_t msecs);
+    boolean setFtpMode(uint8_t mode);
+
+    boolean ftpGet(
+	const char *addr,
+	const char *dir,
+	const char *user,
+	const char *password,
+	const char *filename);
     WFDebug debug;  /* Internal debug channel. */
     
   private:
