@@ -1,10 +1,18 @@
 #include <Servo.h>
-#include <SPI.h>
-#include <Ethernet.h>
+#include <WiFlyHQ.h>
+#include <SoftwareSerial.h>
 #include <PusherClient.h>
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+const char mySSID[] = "my$ssid"; //use $ to represent spaces in your ssid or passphrase
+const char myPassword[] = "my$pass$phrase";
+const char pusherKey[] = "abc123";
+
 PusherClient client;
+
+SoftwareSerial wifiSerial(2,3); //for debugging
+
+WiFly wifly;
+
 Servo leftServo; 
 Servo rightServo; 
 
@@ -17,13 +25,29 @@ void setup() {
 
   leftServo.write(95);
   rightServo.write(95);
-  
+
+  wifiSerial.begin(57600);
   Serial.begin(9600);
-  if (Ethernet.begin(mac) == 0) {
-    Serial.println("Init Ethernet failed");
-    for(;;)
-      ;
+  if (!wifly.begin(&Serial, &wifiSerial)) {
+    wifiSerial.println(F("Failed to start wifly"));
+    wifly.terminal();
   }
+
+  if (!wifly.isAssociated()) {
+    wifiSerial.println(F("Joining network"));
+    if (wifly.join(mySSID, myPassword, true)) {
+      wifly.save();
+      wifiSerial.println(F("Joined wifi network"));
+    } 
+    else {
+      wifiSerial.println(F("Failed to join wifi network"));
+      wifly.terminal();
+    }
+  } 
+  else {
+    wifiSerial.println(F("Already joined network"));
+  }
+  client.setClient(wifly);
   
   if(client.connect("your-api-key-here")) {
     client.bind("forward", moveForward);
