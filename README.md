@@ -1,5 +1,6 @@
 # Arduino Pusher Client, a Pusher client developed for use on Arduino devices
 Blog: [World Domination Using Arduinos And Websockets](http://kevinrohling.wordpress.com/2011/09/14/world-domination-using-arduinos-and-websockets)
+Modified by @jonmarkgo to use the RN-XV WiFly rather than Ethernet.
 
 [Pusher] (http://www.pusherapp.com) is a Push Notification service that uses Websockets for relaying messages back and forth between clients.  This allows real time messaging between a diverse range of applications running on Web browsers, mobile devices and now Arduinos.  It is my hope that allowing devices to easily send information about themselves as well as respond to messages received from applications and other devices will result in some interesting applications.
 
@@ -17,6 +18,14 @@ Included with this library is an example, called RobotExample, that uses Pusher 
 
 ```
 PusherClient client;
+WiFly wifly;
+
+Serial.begin(9600);
+
+wifly.begin(&Serial);
+wifly.join("my$ssid", "my$pass$phrase", true);
+
+client.setClient(wifly);
 
 if(client.connect("your-api-key-here")) {
   //Connected!
