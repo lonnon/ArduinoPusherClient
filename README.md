@@ -46,12 +46,6 @@ void loop() {
 //Subscribing to a Public Channel
 client.subscribe("my-channel");  
 
-//Subscribing to a Private Channel
-client.subscribe("private-my-channel", "my-auth-token");  
-
-//Subscribing to a Presence Channel
-client.subscribe("presence-my-channel", "my-auth-token", "my-user-id"); 
-
 //Unsubscribing to a Channel
 client.unsubscribe("my-channel");  
 
