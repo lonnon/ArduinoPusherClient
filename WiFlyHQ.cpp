@@ -2159,7 +2159,11 @@ boolean WiFly::join(const char *ssid, uint16_t timeout)
 
     send_P(PSTR("join "));
     if (ssid != NULL) {
-	send(ssid);
+        String temp = ssid;
+        temp.replace(' ', '$');
+        char escapedSSID[strlen(ssid) + 1];
+        temp.toCharArray(escapedSSID, strlen(ssid) + 1);
+        send(escapedSSID);
     }
     send_P(PSTR("\r"));
 
