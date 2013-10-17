@@ -2444,7 +2444,7 @@ boolean WiFly::open(const char *addr, int port, boolean block)
     send(buf);
     send_P(PSTR("\r"));
 
-    if (!getPrompt()) {
+    if (!getPrompt(1000)) {
 	debug.println(F("Failed to get prompt"));
 	debug.println(F("WiFly has crashed and will reboot..."));
 	while (1); /* wait for the reboot */
